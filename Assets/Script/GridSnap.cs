@@ -22,7 +22,7 @@ public class GridSnap : MonoBehaviour
         {
             for(int j = 0; j < size; j++)
             {
-                grid[i,j] = new Vector3()
+                //grid[i,j] = new Vector3()
             }
         }
     }
