@@ -215,6 +215,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 156192437}
+  - component: {fileID: 156192438}
   m_Layer: 0
   m_Name: Grid Snap
   m_TagString: Untagged
@@ -236,6 +237,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &156192438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156192436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce0f6f1dcc8ac4c419a2278d110581a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSize: 2
+  gridOffset: 0.91
+  activeRadius: 3.49
+  snapRadius: 0.45
 --- !u!1 &448841403
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +383,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.1
   position: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 0}
+  isMoving: 0
 --- !u!65 &542398496
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -427,7 +446,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542398494}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &542398499
 Transform:
   m_ObjectHideFlags: 0
@@ -437,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 542398494}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3

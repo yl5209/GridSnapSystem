@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class Move : MonoBehaviour
 {
+    public static Move player;
     public float speed;
     public Vector3 position;
+    public Vector3 direction;
+
+    public bool isMoving;
+
+    private void Awake()
+    {
+        player = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -18,8 +27,13 @@ public class Move : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        Vector3 dir = new Vector3(x, 0, z);
-        DoMove(dir * speed);
+        direction = new Vector3(x, 0, z);
+        isMoving = direction != Vector3.zero ? true : false;
+    }
+
+    private void FixedUpdate()
+    {
+        DoMove(direction * speed);
         SetTransform();
     }
 
