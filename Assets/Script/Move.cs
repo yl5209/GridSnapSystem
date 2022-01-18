@@ -11,6 +11,10 @@ public class Move : MonoBehaviour
 
     public bool isMoving;
 
+    //player controller component
+    public CharacterController controller;
+
+
     private void Awake()
     {
         player = this;
@@ -27,19 +31,21 @@ public class Move : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        direction = new Vector3(x, 0, z);
+        direction = transform.right * x + transform.forward * z;
         isMoving = direction != Vector3.zero ? true : false;
     }
 
     private void FixedUpdate()
     {
         DoMove(direction * speed);
-        SetTransform();
+        //SetTransform();
+        
     }
 
     public void DoMove(Vector3 v2)
     {
-        position += v2 * Time.deltaTime;
+        //position += v2 * Time.deltaTime;
+        controller.Move(v2 * Time.deltaTime);
     }
 
     public void SetTransform()
