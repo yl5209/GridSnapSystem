@@ -39,7 +39,7 @@ public class Move : MonoBehaviour
 
     public void DoMove(Vector3 v2)
     {
-        position += v2;
+        position += v2 * Time.deltaTime;
     }
 
     public void SetTransform()

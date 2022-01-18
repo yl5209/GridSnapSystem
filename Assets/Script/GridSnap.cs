@@ -5,26 +5,27 @@ using UnityEngine;
 public class GridSnap : MonoBehaviour
 {
     public int gridSize;
-    public float gridOffset;
+    public float gapSize;
 
     public float activeRadius;
     public float snapRadius;
+    public float snapSpeed;
+    public float predictionLength;
 
     private Vector3[,] grid;
     private int size;
-
-    private Vector3 vel;
+    private Vector3 target;
     // Start is called before the first frame update
     void Start()
     {
         size = gridSize * 2 + 1;
         grid = new Vector3[size, size];
 
-        for(int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
-            for(int j = 0; j < size; j++)
+            for (int j = 0; j < size; j++)
             {
-                grid[i, j] = new Vector3(-gridOffset * 2 + i * gridOffset, 0, -gridOffset * 2 + j * gridOffset);
+                grid[i, j] = transform.position + new Vector3(-gapSize * gridSize + i * gapSize, 0, -gapSize * gridSize + j * gapSize);
             }
         }
     }
@@ -32,6 +33,10 @@ public class GridSnap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if out-of-range
+        if (Vector3.Distance(Move.player.position, transform.position) > activeRadius)
+            return;
+
         UpdateGrid();
 
         SnapPlayer();
@@ -40,24 +45,32 @@ public class GridSnap : MonoBehaviour
     private void SnapPlayer()
     {
         if (Move.player.isMoving)
+        {
+            this.target = GetNode();
             return;
+        }
 
+        Vector3 target = (this.target - Move.player.transform.position) * snapSpeed;
+        Move.player.DoMove(new Vector3(target.x, 0, target.z) * Move.player.speed);
 
+    }
 
+    private Vector3 GetNode()
+    {
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
-                float distance = Vector3.Distance(grid[i, j], new Vector3(Move.player.transform.position.x, 0, Move.player.transform.position.z));
+                float distance = Vector3.Distance(grid[i, j], new Vector3(Move.player.transform.position.x, 0, Move.player.transform.position.z) + new Vector3(Move.player.direction.x, 0, Move.player.direction.z) * predictionLength);
 
-                if (distance < snapRadius && distance > 0.05f)
+                if (distance < snapRadius)
                 {
-                    Debug.Log("Checking");
-                    Vector3 target = Vector3.SmoothDamp(Move.player.transform.position, grid[i, j], ref vel, 0.15f);
-                    Move.player.DoMove(new Vector3(target.x, 0, target.z));
+                    return grid[i, j];
                 }
             }
         }
+
+        return Move.player.transform.position;
     }
 
     private void UpdateGrid()
@@ -66,7 +79,7 @@ public class GridSnap : MonoBehaviour
         {
             for (int j = 0; j < size; j++)
             {
-                grid[i, j] = new Vector3(-gridOffset * 2 + i * gridOffset, 0, -gridOffset * 2 + j * gridOffset);
+                grid[i, j] = transform.position + new Vector3(-gapSize * gridSize + i * gapSize, 0, -gapSize * gridSize + j * gapSize);
             }
         }
     }
@@ -84,5 +97,9 @@ public class GridSnap : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(grid[gridSize, gridSize], activeRadius);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.target, snapRadius);
+        Gizmos.DrawLine(Move.player.transform.position, Move.player.transform.position + new Vector3(Move.player.direction.x, 0, Move.player.direction.z) * predictionLength);
     }
 }
