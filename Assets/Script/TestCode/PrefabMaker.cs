@@ -14,7 +14,7 @@ public class PrefabMaker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -28,7 +28,7 @@ public class PrefabMaker : MonoBehaviour
 
     public void DoThis()
     {
-        prefab = Instantiate(new GameObject(), new Vector3(1,2,3), Quaternion.identity);
+        prefab = Instantiate(new GameObject(), new Vector3(1, 2, 3), Quaternion.identity);
         prefab.name = "New_Station";
         prefab.AddComponent<TestObject>();
         prefab.GetComponent<TestObject>().propertyA = 123.0f;
@@ -41,6 +41,15 @@ public class PrefabMaker : MonoBehaviour
         prefab.GetComponent<TestObject>().listB.Add(c);
 
         string path = "Assets/Prefabs/" + prefab.name + ".prefab";
+
+        int id = 1;
+
+        while (System.IO.File.Exists(path))
+        {
+            prefab.name = "New_Station_" + id;
+            path = "Assets/Prefabs/" + prefab.name + ".prefab";
+            id++;
+        }
 
         PrefabUtility.SaveAsPrefabAsset(prefab, path);
     }
